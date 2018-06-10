@@ -1,4 +1,6 @@
 import { ORM, Session, createReducer, createSelector } from '../';
+import { createStore, combineReducers } from 'redux';
+
 import { createTestModels } from './utils';
 
 describe('Redux integration', () => {
@@ -245,6 +247,24 @@ describe('Redux integration', () => {
 
         selector(otherUserState);
         expect(_selectorFunc.mock.calls.length).toBe(2);
+    });
+
+    it('reusing the same models in different ORMs works', () => {
+        const store = createStore(
+            combineReducers({
+                orm: createReducer(orm),
+            })
+        );
+
+        const orm2 = new ORM();
+        orm2.register(Book, Cover, Genre, Tag, Author, Publisher);
+        expect(() => {
+            const store2 = createStore(
+                combineReducers({
+                    orm: createReducer(orm2),
+                })
+            );
+        }).not.toThrow();
     });
 
     it('calling reducer with undefined state doesn\'t throw', () => {
