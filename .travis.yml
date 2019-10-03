@@ -5,6 +5,12 @@ node_js:
   - "10"
   - "8"
 
+stages:
+  - lint
+  - build
+  - test
+  - docs
+
 jobs:
   include:
     - stage: lint
@@ -15,7 +21,7 @@ jobs:
       script: "npm run test:es5"
       script: npm run test
       script: "npm run test:perf"
-    - stage: build_docs
+    - stage: docs
       before_script: cd website
       script: npm install && npm run build
 
