@@ -11,19 +11,13 @@ stages:
   - test
   - docs
 
-jobs:
-  include:
-    - stage: lint
-      script: npm run lint
-    - stage: build
-      script: npm run build
-    - stage: test
-      script: "npm run test:es5"
-      script: npm run test
-      script: "npm run test:perf"
-    - stage: docs
-      before_script: cd website
-      script: npm install && npm run build
+script:
+  - npm run lint
+  - npm run build
+  - "npm run test:es5"
+  - npm run test
+  - "npm run test:perf"
+  - cd website && npm install && npm run build
 
 after_success:
   - codecov
